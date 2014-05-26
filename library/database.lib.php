@@ -67,10 +67,19 @@ class cConnection {
 	}
 
 	function open($persistent = FALSE) {
+		GLOBAL $php_errormsg;
+
 		static $connectionfunctions = array(1 => "mysql_pconnect", 0 => "mysql_connect");
 
-		$this->_con = @$connectionfunctions[$persistent ? 1 : 0]($this->_hostname, $this->_username, $this->_password);
-		return isset($this->_con) && trim($this->_con) != "";
+		$this->_con = $connectionfunctions[$persistent ? 1 : 0]($this->_hostname, $this->_username, $this->_password);
+		$php_errormsg = mysql_errno();
+		if ($php_errormsg) {
+			$php_errormsg = $textres['error_error'].': (code: '.$php_errormsg.') '.mysql_error();
+		} else {
+			$php_errormsg = null;
+		}
+		
+		return $this->_con!==false;
 	}
 
 	function query($stat, $file=NULL, $line=NULL) {

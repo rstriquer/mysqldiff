@@ -29,7 +29,7 @@ function checkConnection($data, &$cfg, &$info) {
 			$result = $con->selectDatabase(trim($data["database"]));
 		} else $result = TRUE;
 	} else {
-		$info = isset($php_errormsg) ? $php_errormsg : NULL;
+		$info = isset($php_errormsg) ? $php_errormsg : 'erro indefinido';
 	}
 	return $result;
 }
